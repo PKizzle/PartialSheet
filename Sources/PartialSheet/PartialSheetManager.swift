@@ -41,7 +41,7 @@ public class PartialSheetManager: ObservableObject {
     }
 
     /// Custom keyboard offset
-    @Published var customOffset: CGFloat?
+    @Published public var customOffset: CGFloat?
 
     /// Internal hidden state for sheet
     private(set) var isHidden: Bool = true
