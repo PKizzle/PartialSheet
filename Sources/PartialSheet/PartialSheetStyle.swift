@@ -25,6 +25,9 @@ public struct PartialSheetStyle {
     /// The blur effect style to applied between the partialSheet and the Presenter Conter
     var blurEffectStyle: UIBlurEffect.Style?
 
+    /// The blur effect style applied to the Partial Sheet
+    var sheetBlurEffectStyle: UIBlurEffect.Style?
+
     /**
      The **Style** for the PartialSheet
      - parameter backgroundColor: The background color of the partial sheet
@@ -32,6 +35,7 @@ public struct PartialSheetStyle {
      - parameter enableCover: True if you want a cover enabled between the sheet and the presenter view.
      - parameter coverColor: The color of the cover,  use the .opacity modifier if you want a transparent effect
      - parameter blurEffectStyle: If you want a blur effect on the cover, set the effect style, otherwise put it to nil.
+     - parameter sheetBlurEffectStyle: For a blur effect on the sheet, set the effect style, otherwise put it to nil.
 
      Use `PartialSheetStyle.defaultStyle` if you want a quicker init for the style with default values.
      */
@@ -40,13 +44,15 @@ public struct PartialSheetStyle {
         handlerBarColor: Color,
         enableCover: Bool,
         coverColor: Color,
-        blurEffectStyle: UIBlurEffect.Style?
+        blurEffectStyle: UIBlurEffect.Style?,
+        sheetBlurEffectStyle: UIBlurEffect.Style?
     ) {
         self.backgroundColor = backgroundColor
         self.handlerBarColor = handlerBarColor
         self.enableCover = enableCover
         self.coverColor = coverColor
         self.blurEffectStyle = blurEffectStyle
+        self.sheetBlurEffectStyle = sheetBlurEffectStyle
     }
 }
 
@@ -59,13 +65,15 @@ extension PartialSheetStyle {
      - enableCover: true
      - coverColor: Color.black.opacity(0.4)
      - blurEffectStyle: nil
+     - sheetBlurEffectStyle: nil
      */
     public static func defaultStyle() -> PartialSheetStyle {
         return PartialSheetStyle(backgroundColor: Color(UIColor.tertiarySystemBackground),
                                  handlerBarColor: Color(UIColor.systemGray2),
                                  enableCover: true,
                                  coverColor: Color.black.opacity(0.4),
-                                 blurEffectStyle: nil
+                                 blurEffectStyle: nil,
+                                 sheetBlurEffectStyle: nil
         )
     }
 }

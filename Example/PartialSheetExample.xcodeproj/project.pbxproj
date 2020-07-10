@@ -140,6 +140,8 @@
 			dependencies = (
 			);
 			name = PartialSheetExample;
+			packageProductDependencies = (
+			);
 			productName = PartialSheetExample;
 			productReference = 1F177A6A23E1ECC3006F59D0 /* PartialSheetExample.app */;
 			productType = "com.apple.product-type.application";
@@ -151,7 +153,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Swift;
 				TargetAttributes = {
 					1F177A6923E1ECC3006F59D0 = {
@@ -168,6 +170,8 @@
 				Base,
 			);
 			mainGroup = 1F177A6123E1ECC3006F59D0;
+			packageReferences = (
+			);
 			productRefGroup = 1F177A6B23E1ECC3006F59D0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -240,6 +244,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -300,6 +305,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;

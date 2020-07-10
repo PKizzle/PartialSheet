@@ -59,7 +59,7 @@ struct ContentView: View {
             }
             .navigationBarTitle("Partial Sheet")
         }
-        .addPartialSheet()
+        .addPartialSheet(style: partialSheetStyle)
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }

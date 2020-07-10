@@ -32,12 +32,21 @@ struct NormalExample: View {
     }
 }
 
+let partialSheetStyle = PartialSheetStyle(
+    backgroundColor: Color(UIColor.tertiarySystemBackground),
+    handlerBarColor: Color(UIColor.systemGray2),
+    enableCover: false,
+    coverColor: .clear,
+    blurEffectStyle: nil,
+    sheetBlurEffectStyle: .systemUltraThinMaterial
+)
+
 struct NormalExample_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             NormalExample()
         }
-        .addPartialSheet()
+        .addPartialSheet(style: partialSheetStyle)
         .navigationViewStyle(StackNavigationViewStyle())
         .environmentObject(PartialSheetManager())
     }
@@ -47,6 +56,7 @@ struct SheetView: View {
     @State private var longer: Bool = false
     @State private var text: String = "some text"
 
+    @EnvironmentObject var partialSheetManager : PartialSheetManager
 
     var body: some View {
         VStack {
@@ -72,6 +82,17 @@ struct SheetView: View {
                     Text("More settings here...")
                 }
                 .frame(height: 200)
+                .alignmentGuide(VerticalAlignment.center) { data in
+                    if self.longer {
+                        DispatchQueue.main.async(qos: DispatchQoS.userInteractive) {
+                            self.partialSheetManager.customOffset = data.height
+                        }
+                    }
+                    return data[VerticalAlignment.center]
+                }
+                .onDisappear {
+                    self.partialSheetManager.customOffset = 0
+                }
             }
         }
     }

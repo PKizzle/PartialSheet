@@ -30,10 +30,21 @@ public class PartialSheetManager: ObservableObject {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
                     self?.content = AnyView(EmptyView())
                     self?.onDismiss = nil
+                    self?.isHidden = true
+                }
+            } else {
+                withAnimation {
+                    self.isHidden = false
                 }
             }
         }
     }
+
+    /// Custom keyboard offset
+    @Published var customOffset: CGFloat?
+
+    /// Internal hidden state for sheet
+    private(set) var isHidden: Bool = true
     /// The content of the sheet
     private(set) var content: AnyView
     /// the onDismiss code runned when the partial sheet is closed

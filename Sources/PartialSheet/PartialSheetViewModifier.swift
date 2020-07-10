@@ -141,27 +141,33 @@ extension PartialSheet {
         }
     }
 
+
+    private func calculateiPhoneSheetOffset() -> CGFloat {
+        self.manager.isPresented ?
+                    self.topAnchor + self.dragState.translation.height - self.offset +
+                    (self.offset != 0 ? (self.manager.customOffset ?? 0) : 0) :
+                    self.bottomAnchor - self.dragState.translation.height
+    }
+
     //MARK: - iPhone Sheet Builder
 
     /// This is the builder for the sheet content for iPhone devices only
-    private func iPhoneSheet()-> some View {
+    private func iPhoneSheet() -> some View {
         // Build the drag gesture
         let drag = dragGesture()
         
         return ZStack {
 
             //MARK: - iPhone Cover View
-
             if manager.isPresented {
                 Group {
-                    if style.enableCover {
-                        Rectangle()
-                            .foregroundColor(style.coverColor)
-                    }
+                    Rectangle()
+                        .foregroundColor(style.enableCover ? style.coverColor : Color.black.opacity(0.0001))
                     if style.blurEffectStyle != nil {
                         BlurEffectView(style: style.blurEffectStyle ?? UIBlurEffect.Style.systemChromeMaterial)
                     }
                 }
+                .animation(nil)
                 .edgesIgnoringSafeArea(.vertical)
                 .onTapGesture {
                     withAnimation {
@@ -170,9 +176,11 @@ extension PartialSheet {
                         self.manager.onDismiss?()
                     }
                 }
+
             }
-            // The SHEET VIEW
-            Group {
+
+            if !self.manager.isHidden {
+                // The SHEET VIEW
                 VStack(spacing: 0) {
                     // This is the little rounded bar (HANDLER) on top of the sheet
                     VStack {
@@ -190,24 +198,33 @@ extension PartialSheet {
                                 GeometryReader { proxy in
                                     Color.clear.preference(key: SheetPreferenceKey.self, value: [PreferenceData(bounds: proxy.frame(in: .global))])
                                 }
-                        )
-                        .animation(nil)
+                            )
+                            .animation(nil)
                     }
                     Spacer()
                 }
                 .onPreferenceChange(SheetPreferenceKey.self, perform: { (prefData) in
-                    self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    DispatchQueue.main.async(qos: DispatchQoS.userInteractive) {
+                        self.sheetContentRect = prefData.first?.bounds ?? .zero
+                    }
                 })
-                    .frame(width: UIScreen.main.bounds.width)
-                    .background(style.backgroundColor)
-                    .cornerRadius(10.0)
-                    .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
-                    .offset(y: self.manager.isPresented ?
-                        self.topAnchor + self.dragState.translation.height - self.offset : self.bottomAnchor - self.dragState.translation.height
+                .frame(width: UIScreen.main.bounds.width)
+                .background(
+                    Group {
+                        if style.sheetBlurEffectStyle == nil {
+                            style.backgroundColor
+                        } else {
+                            BlurEffectView(style: style.sheetBlurEffectStyle ?? UIBlurEffect.Style.systemUltraThinMaterial)
+                        }
+                    }
                 )
-                    .animation(self.dragState.isDragging ?
-                        nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
-                    .gesture(drag)
+                .cornerRadius(10.0)
+                .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.13), radius: 10.0)
+                .offset(y: self.calculateiPhoneSheetOffset())
+                .transition(.move(edge: .bottom))
+                .animation(self.dragState.isDragging ?
+                            nil : .interpolatingSpring(stiffness: 300.0, damping: 30.0, initialVelocity: 10.0))
+                .gesture(drag)
             }
         }
     }
@@ -257,7 +274,7 @@ extension PartialSheet {
         
         // Set the correct anchor point based on the vertical direction of the drag
         if verticalDirection > 1 {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async(qos: DispatchQoS.userInteractive) {
                 self.manager.isPresented = false
                 self.manager.onDismiss?()
             }
@@ -287,7 +304,7 @@ extension PartialSheet {
 
     /// Remove the keyboard offset
     private func keyboardHide(notification: Notification) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async(qos: DispatchQoS.userInitiated) {
             self.offset = 0
         }
     }
@@ -295,7 +312,9 @@ extension PartialSheet {
     /// Dismiss the keyboard
     private func dismissKeyboard() {
         let resign = #selector(UIResponder.resignFirstResponder)
-        UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+        DispatchQueue.main.async(qos: DispatchQoS.userInitiated) {
+            UIApplication.shared.sendAction(resign, to: nil, from: nil, for: nil)
+        }
     }
 }
 
